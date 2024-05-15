@@ -17,6 +17,8 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import com.marcusvinicius.workshopmongo.domain.User;
 import com.marcusvinicius.workshopmongo.dto.UserDTO;
 import com.marcusvinicius.workshopmongo.services.UserService;
+import org.springframework.web.bind.annotation.PutMapping;
+
 
 @RestController
 @RequestMapping("/users")
@@ -46,7 +48,7 @@ public class UserResource {
 	public ResponseEntity<Void> insert(@RequestBody UserDTO objDTO) {
 		User obj = service.fromDTO(objDTO);
 		obj = service.insert(obj);
-		System.out.println("obj = " + obj);
+		
 		//Buscar o endereço do novo objeto e retornar uma resposta com a sua URI
 		URI uri = ServletUriComponentsBuilder
 				.fromCurrentRequest()
@@ -62,5 +64,13 @@ public class UserResource {
 		service.delete(id);
 		return ResponseEntity.noContent().build();
 	}
-
+	
+	@PutMapping("{id}")
+	public ResponseEntity<Void> update(@PathVariable String id, @RequestBody UserDTO objDTO) {
+		User obj = service.fromDTO(objDTO);
+		obj.setId(id);
+		obj = service.update(obj);
+					
+		return ResponseEntity.noContent().build();
+	}
 }
